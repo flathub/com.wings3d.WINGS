@@ -151,8 +151,8 @@
         {
 	  "type": "git",
 	  "url": "https://github.com/dgud/wings.git",
-	  "tag": "v2.2.3",
-	  "commit": "b302aab10ad3188b0fd57c3965a38a1580b5c852"
+	  "tag": "v2.2.4",
+	  "commit": "9a5c6bbf19ae37fb3379649581577402ec960b2b"
         }
       ]
     }
