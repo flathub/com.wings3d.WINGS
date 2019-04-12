@@ -50,6 +50,7 @@
     {
       "name": "erlang-otp",
       "config-opts": [
+        "--disable-pgo",
 	"--without-hipe",
 	"--without-javac", /* "--without-ssl", */
 	"--without-erl_interface", /* "--without-asn1", */
