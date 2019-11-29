@@ -1,7 +1,7 @@
 {
   "app-id": "com.wings3d.WINGS",
   "runtime": "org.freedesktop.Platform",
-  "runtime-version": "18.08",
+  "runtime-version": "19.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "wings",
   "rename-icon": "wings",
@@ -20,29 +20,19 @@
     "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
 
-  "cleanup": [
-    "/lib/erlang",
-    "/bin/ct_run",
-    "/bin/*er",
-    "/bin/epmd",
-    "/bin/*erl*",
-    "/bin/rebar3",
-    "escript",
-    "/bin/wx*",
-    "/include"],
 
   "modules": [
-    "shared-modules/glu/glu-9.0.0.json",
+    "shared-modules/glu/glu-9.json",
     {
-      "name": "wxWidgets-311",
+      "name": "wxWidgets-313",
       "config-opts": [
 	"--enable-compat28"
       ],
       "sources": [
         {
           "type": "archive",
-	  "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.tar.bz2",
-	  "sha1": "f999c3cf1887c0a60e519214c14b15cb9bb5ea6e"
+	  "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.3/wxWidgets-3.1.3.tar.bz2",
+	  "sha1": "18be15d7a9e5b733e647677d3e9bc476df727f73"
         }
       ]
     },
@@ -69,7 +59,6 @@
 	"--without-et",
 	"--without-eunit",
 	"--without-ftp",
-	"--without-inets",
 	"--without-parsetools",
 	"--without-reltool",
 	"--without-sasl",
@@ -84,8 +73,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "http://erlang.org/download/otp_src_21.2.tar.gz",
-	  "md5": "8a797dfe4cfb1bbf1b007f01b2f5a1ad"
+          "url": "https://erlang.org/download/otp_src_22.1.tar.gz",
+	  "md5": "c23a64fecec779fd2d07074553d4625e"
         }
       ]
     },
@@ -99,10 +88,26 @@
       "sources": [
         {
           "type": "file",
-	  "url": "https://github.com/erlang/rebar3/releases/download/3.7.5/rebar3",
-	  "sha256": "1b3d7bf29e3469066a0e95a380ae509430918010f2ae6d363d75cdb2c4958421"
+	  "url": "https://github.com/erlang/rebar3/releases/download/3.12.0/rebar3",
+	  "sha256": "d39bda02dd30276b2803fdb64ff731723961007608aa38e7422e603def70dc55"
         }
       ]
+    },
+
+    {
+	"name": "opencl-headers",
+	"buildsystem": "simple",
+	"build-commands": [
+	    "cp -av opencl22/CL /app/include/",
+	    "install -p -D -m 0644 LICENSE -t ${FLATPAK_DEST}/share/licenses/opencl-headers/"
+	],
+
+	"sources": [
+	    { "type": "git",
+	      "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
+	      "commit": "e986688daf750633898dfd3994e14a9e618f2aa5"
+	    }
+	]
     },
 
     {
@@ -152,8 +157,8 @@
         {
 	  "type": "git",
 	  "url": "https://github.com/dgud/wings.git",
-	  "tag": "v2.2.4",
-	  "commit": "9a5c6bbf19ae37fb3379649581577402ec960b2b"
+	  "tag": "v2.2.5",
+	  "commit": "1a81a6cf532868ff44c170b03f557cb5b49a2b18"
         }
       ]
     }
