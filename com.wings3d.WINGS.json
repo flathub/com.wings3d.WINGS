@@ -1,10 +1,24 @@
 {
   "app-id": "com.wings3d.WINGS",
   "runtime": "org.freedesktop.Platform",
-  "runtime-version": "20.08",
+  "runtime-version": "23.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "wings",
   "rename-icon": "wings",
+
+  "add-extensions": {
+    "org.freedesktop.Platform": {
+      "directory": "lib/linux-gnu",
+      "version": "23.08",
+      "subdirectories": true,
+      "no-autodownload": true,
+      "autodelete": false,
+      "add-ld-path": "lib",
+      "merge-dirs": "glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d",
+      "download-if": "active-gl-driver",
+      "enable-if": "active-gl-driver"
+    }
+  },
 
   "finish-args": [
     /* X11 + XShm access */
@@ -20,19 +34,18 @@
     "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
 
-
   "modules": [
     "shared-modules/glu/glu-9.json",
     {
-      "name": "wxWidgets-314",
+      "name": "wxWidgets-315",
       "config-opts": [
-	"--enable-compat28"
+        "--enable-compat30"
       ],
       "sources": [
         {
           "type": "archive",
-	  "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.tar.bz2",
-	  "sha1": "f8c77e6336b5f6414b07e27baa489fb8abc620c4"
+          "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.5/wxWidgets-3.1.5.tar.bz2",
+          "sha1": "725455d6324baa808259b56a42199237327e0638"
         }
       ]
     },
@@ -41,40 +54,38 @@
       "name": "erlang-otp",
       "config-opts": [
         "--disable-pgo",
-	"--without-hipe",
-	"--without-javac", /* "--without-ssl", */
-	"--without-erl_interface", /* "--without-asn1", */
-	"--without-dialyzer",
-	"--without-eldap",
-	"--without-snmp",
-	"--without-megaco",
-	"--without-diameter",
-	"--without-os_mon",
-	"--without-mnesia",
-	"--without-otp_mibs",
-	"--without-common-test",
-	"--without-debugger",
-	"--without-edoc",
-	"--without-erl_docgen",
-	"--without-et",
-	"--without-eunit",
-	"--without-ftp",
-	"--without-parsetools",
-	"--without-reltool",
-	"--without-sasl",
-	"--without-ssh",
-	"--without-syntax_tools",
-	"--without-tftp",
-	"--without-tools"
+        "--without-hipe",
+        "--without-javac",
+        "--without-dialyzer",
+        "--without-eldap",
+        "--without-snmp",
+        "--without-megaco",
+        "--without-diameter",
+        "--without-os_mon",
+        "--without-mnesia",
+        "--without-otp_mibs",
+        "--without-common-test",
+        "--without-debugger",
+        "--without-edoc",
+        "--without-erl_docgen",
+        "--without-et",
+        "--without-eunit",
+        "--without-ftp",
+        "--without-parsetools",
+        "--without-reltool",
+        "--without-ssh",
+        "--without-syntax_tools",
+        "--without-tftp",
+        "--without-tools"
       ],
       "build-options": {
-	"no-debuginfo": true
+        "no-debuginfo": true
       },
       "sources": [
         {
           "type": "archive",
-          "url": "https://erlang.org/download/otp_src_23.3.tar.gz",
-	  "md5": "d6660705f01afbe3466c0a5de21ab361"
+          "url": "https://github.com/erlang/otp/releases/download/OTP-26.1.1/otp_src_26.1.1.tar.gz",
+          "md5": "dfaab1442ced777a8b5460696f9d426e"
         }
       ]
     },
@@ -83,51 +94,50 @@
       "name": "rebar3",
       "buildsystem": "simple",
       "build-commands": [
-	"install -D rebar3 /app/bin/rebar3"
+        "install -D rebar3 /app/bin/rebar3"
       ],
       "sources": [
         {
           "type": "file",
-	  "url": "https://github.com/erlang/rebar3/releases/download/3.13.3/rebar3",
-	  "sha256": "a97e5368a9fce873a23c71c9bb3a63e760a7ace60842460e4704db5cad4df54c"
+          "url": "https://github.com/erlang/rebar3/releases/download/3.22.1/rebar3",
+          "sha256": "ac43aaae769650b021033a3be4709bec1d6abd965368d2c31c881daaf8dbbb07"
         }
       ]
     },
 
     {
-	"name": "opencl-headers",
-	"buildsystem": "simple",
-	"build-commands": [
+      "name": "opencl-headers",
+      "buildsystem": "simple",
+      "build-commands": [
 	    "cp -av CL /app/include/",
 	    "install -p -D -m 0644 LICENSE -t ${FLATPAK_DEST}/share/licenses/opencl-headers/"
-	],
+    ],
 
-	"sources": [
-	    { "type": "git",
-	      "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
-	      "commit": "c57ba81c460ee97b6b9d0b8d18faf5ba6883114b" /* v2020.06.16 */
-	    }
-	]
+      "sources": [
+          { "type": "git",
+            "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
+            "commit": "e049b16b5f157e2f28e7b5c301e71e1ccb3fe288"
+          }
+        ]
     },
 
     {
       "name": "cl",
       "buildsystem": "simple",
       "build-commands": [
-	/* OpenCL is optional and there is no headers in org.freedesktop.Sdk  20.08 */
-	"rebar3 compile || erlc -oebin src/*.erl && cp src/cl.app.src ebin/cl.app",
-	"install -d /app/lib/erlang/lib/cl/ebin /app/lib/erlang/lib/cl/priv /app/lib/erlang/lib/cl/include",
+        /* OpenCL is optional and there is no headers in org.freedesktop.Sdk  20.08 */
+        "rebar3 compile || erlc -oebin src/*.erl && cp src/cl.app.src ebin/cl.app",
+        "install -d /app/lib/erlang/lib/cl/ebin /app/lib/erlang/lib/cl/priv /app/lib/erlang/lib/cl/include",
         "install -t /app/lib/erlang/lib/cl/ebin ebin/*",
-	"install -t /app/lib/erlang/lib/cl/include include/*",
-	"[ -d priv ] && install -t /app/lib/erlang/lib/cl/priv priv/* || true"
+        "install -t /app/lib/erlang/lib/cl/include include/*",
+        "[ -d priv ] && install -t /app/lib/erlang/lib/cl/priv priv/* || true"
       ],
 
       "sources": [
         {
           "type": "git",
-	  "url": "https://github.com/tonyrog/cl.git",
-	  "tag": "cl-1.2.4",
-	  "commit": "f0a5631fdcf4e1c56e6bf1568c6c2c8fff0d66df"
+          "url": "https://github.com/tonyrog/cl.git",
+          "commit": "1f61da01ed3cd4b9aaec95ff352b1eeb64a63365"
         }
       ]
     },
@@ -144,9 +154,8 @@
       "sources": [
         {
           "type": "git",
-          "url": "https://github.com/eigenteam/eigen-git-mirror.git",
-          "tag": "3.3.7",
-          "commit": "cf794d3b741a6278df169e58461f8529f43bce5d"
+          "url": "https://gitlab.com/libeigen/eigen.git",
+          "tag": "3.3.9"
         }
       ]
     },
@@ -163,8 +172,7 @@
         {
           "type": "git",
           "url": "https://github.com/dgud/libigl.git",
-          "tag": "v2.1.0",
-          "commit": "f6b406427400ed7ddb56cfc2577b6af571827c8c"
+          "commit": "0f8b991a46a1c97da305e7db4f311fa51e0c36ca"
         }
       ]
     },
@@ -173,30 +181,30 @@
       "name": "wings",
       "buildsystem": "simple",
       "build-options": {
-	"no-debuginfo": true,
-	"env": {
-	  "GL_LIBS": "-L/app/lib",
-	  "HOME": "/app/lib"
-	}
+        "no-debuginfo": true,
+        "env": {
+          "GL_LIBS": "-L/app/lib",
+          "HOME": "/app/lib"
+        }
       },
       "build-commands": [
         "mv ${FLATPAK_DEST}/_deps .",
-	"make unix",
-	"./wings-*-linux.bzip2.run",
-	"install -d /app/share/applications /app/share/appdata",
-	"sed -i 's/^Exec=.*/Exec=wings %f/' /app/lib/wings-*/wings.desktop",
-	"install /app/lib/wings-*/wings.desktop /app/share/applications/com.wings3d.WINGS.desktop",
-	"install /app/lib/wings-*/wings.appdata.xml /app/share/appdata/com.wings3d.WINGS.appdata.xml",
-	"install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_48x48.png /app/share/icons/hicolor/48x48/apps/wings.png",
-	"install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_256x256.png /app/share/icons/hicolor/256x256/apps/wings.png",
-	"install /app/lib/wings-*/wings /app/bin"
+        "make unix",
+        "./wings-*-linux.bzip2.run",
+        "install -d /app/share/applications /app/share/appdata",
+        "sed -i 's/^Exec=.*/Exec=wings %f/' /app/lib/wings-*/wings.desktop",
+        "install /app/lib/wings-*/wings.desktop /app/share/applications/com.wings3d.WINGS.desktop",
+        "install /app/lib/wings-*/wings.appdata.xml /app/share/appdata/com.wings3d.WINGS.appdata.xml",
+        "install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_48x48.png /app/share/icons/hicolor/48x48/apps/wings.png",
+        "install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_256x256.png /app/share/icons/hicolor/256x256/apps/wings.png",
+        "install /app/lib/wings-*/wings /app/bin"
       ],
       "sources": [
         {
-	  "type": "git",
-	  "url": "https://github.com/dgud/wings.git",
-	  "tag": "v2.2.7",
-	  "commit": "a64f8f766cef0c197dc23d511764103d65ab376c"
+          "type": "git",
+          "url": "https://github.com/dgud/wings.git",
+	  /* "tag": "v2.3", */
+          "commit": "4d3e856e666202dcefbf0103a2f6638ae03f1129"
         }
       ]
     }
