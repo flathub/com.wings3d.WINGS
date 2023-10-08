@@ -1,10 +1,24 @@
 {
   "app-id": "com.wings3d.WINGS",
   "runtime": "org.freedesktop.Platform",
-  "runtime-version": "21.08",
+  "runtime-version": "23.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "wings",
   "rename-icon": "wings",
+
+  "add-extensions": {
+    "org.freedesktop.Platform": {
+      "directory": "lib/linux-gnu",
+      "version": "23.08",
+      "subdirectories": true,
+      "no-autodownload": true,
+      "autodelete": false,
+      "add-ld-path": "lib",
+      "merge-dirs": "glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d",
+      "download-if": "active-gl-driver",
+      "enable-if": "active-gl-driver"
+    }
+  },
 
   "finish-args": [
     /* X11 + XShm access */
@@ -20,19 +34,18 @@
     "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
 
-
   "modules": [
     "shared-modules/glu/glu-9.json",
     {
-      "name": "wxWidgets-314",
+      "name": "wxWidgets-322",
       "config-opts": [
-	    "--enable-compat28"
+        "--enable-compat30"
       ],
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.tar.bz2",
-          "sha1": "f8c77e6336b5f6414b07e27baa489fb8abc620c4"
+          "url": "https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2",
+          "sha1": "d645cacbf2678cfc402ae163f2b0e0b05be5d239"
         }
       ]
     },
@@ -66,13 +79,13 @@
         "--without-tools"
       ],
       "build-options": {
-	"no-debuginfo": true
+        "no-debuginfo": true
       },
       "sources": [
         {
           "type": "archive",
-          "url": "https://erlang.org/download/otp_src_24.2.tar.gz",
-          "md5": "ebb6e865738255ae31ff680cc96d71a9"
+          "url": "https://github.com/erlang/otp/releases/download/OTP-26.1.1/otp_src_26.1.1.tar.gz",
+          "md5": "dfaab1442ced777a8b5460696f9d426e"
         }
       ]
     },
@@ -86,8 +99,8 @@
       "sources": [
         {
           "type": "file",
-          "url": "https://github.com/erlang/rebar3/releases/download/3.18.0/rebar3",
-          "sha256": "f3e2641be923ce23076ce4843ee61c63fb392bc6c44dc9d129e4b31f7e136ff0"
+          "url": "https://github.com/erlang/rebar3/releases/download/3.22.1/rebar3",
+          "sha256": "ac43aaae769650b021033a3be4709bec1d6abd965368d2c31c881daaf8dbbb07"
         }
       ]
     },
@@ -96,23 +109,22 @@
       "name": "opencl-headers",
       "buildsystem": "simple",
       "build-commands": [
-          "cp -av CL /app/include/",
-          "install -p -D -m 0644 LICENSE -t ${FLATPAK_DEST}/share/licenses/opencl-headers/"
-      ],
+	    "cp -av CL /app/include/",
+	    "install -p -D -m 0644 LICENSE -t ${FLATPAK_DEST}/share/licenses/opencl-headers/"
+    ],
 
       "sources": [
-        { "type": "git",
-          "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
-          "commit": "59ac4dc2f282286d8db83143686cfe37ec658b84" /* v2022.01.04 */
-        }
-      ]
+          { "type": "git",
+            "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
+            "commit": "e049b16b5f157e2f28e7b5c301e71e1ccb3fe288"
+          }
+        ]
     },
 
     {
       "name": "cl",
       "buildsystem": "simple",
       "build-commands": [
-	  /* OpenCL is optional and there is no headers in org.freedesktop.Sdk  20.08 */
         "rebar3 compile || erlc -oebin src/*.erl && cp src/cl.app.src ebin/cl.app",
         "install -d /app/lib/erlang/lib/cl/ebin /app/lib/erlang/lib/cl/priv /app/lib/erlang/lib/cl/include",
         "install -t /app/lib/erlang/lib/cl/ebin ebin/*",
@@ -142,9 +154,9 @@
       "sources": [
         {
           "type": "git",
-          "url": "https://github.com/eigenteam/eigen-git-mirror.git",
+          "url": "https://gitlab.com/libeigen/eigen.git",
           "tag": "3.3.7",
-          "commit": "cf794d3b741a6278df169e58461f8529f43bce5d"
+    	  "commit": "21ae2afd4edaa1b69782c67a54182d34efe43f9c"
         }
       ]
     },
@@ -161,8 +173,7 @@
         {
           "type": "git",
           "url": "https://github.com/dgud/libigl.git",
-          "tag": "v2.1.0",
-          "commit": "f6b406427400ed7ddb56cfc2577b6af571827c8c"
+          "commit": "0f8b991a46a1c97da305e7db4f311fa51e0c36ca"
         }
       ]
     },
@@ -193,8 +204,8 @@
         {
           "type": "git",
           "url": "https://github.com/dgud/wings.git",
-          "tag": "v2.2.9",
-          "commit": "0ebe43abfcb094344c015589d8cd072b643d80ed"
+	  "tag": "v2.3",
+          "commit": "4d3e856e666202dcefbf0103a2f6638ae03f1129"
         }
       ]
     }
