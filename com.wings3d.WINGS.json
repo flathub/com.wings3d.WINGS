@@ -11,15 +11,13 @@
     "--share=ipc",
     "--socket=x11",
     "--device=dri",
-    "--talk-name=org.gtk.vfs.*",
-    "--filesystem=xdg-run/gvfsd",
     /* Needs to access files locally */
     "--filesystem=home",
     /* dconf */
     "--filesystem=xdg-run/dconf",
     "--filesystem=~/.config/dconf:ro",
     "--talk-name=ca.desrt.dconf",
-    "--env=DCONF_USER_CONFIG_DIR=~/.config/dconf"
+    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
 
   "modules": [
@@ -142,9 +140,9 @@
       "sources": [
         {
           "type": "git",
-          "url": "https://gitlab.com/libeigen/eigen.git",
+          "url": "https://github.com/eigenteam/eigen-git-mirror.git",
           "tag": "3.3.7",
-          "commit": "21ae2afd4edaa1b69782c67a54182d34efe43f9c"
+          "commit": "cf794d3b741a6278df169e58461f8529f43bce5d"
         }
       ]
     },
@@ -161,7 +159,8 @@
         {
           "type": "git",
           "url": "https://github.com/dgud/libigl.git",
-          "commit": "0f8b991a46a1c97da305e7db4f311fa51e0c36ca"
+          "tag": "v2.1.0",
+          "commit": "f6b406427400ed7ddb56cfc2577b6af571827c8c"
         }
       ]
     },
