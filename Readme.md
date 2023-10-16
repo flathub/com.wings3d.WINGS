@@ -7,3 +7,4 @@ Create releases with:
 
 Test with:
  `flatpak-builder --run build-dir com.wings3d.WINGS.json wings`
+
