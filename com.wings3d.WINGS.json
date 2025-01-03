@@ -9,7 +9,8 @@
   "finish-args": [
     /* X11 + XShm access */
     "--share=ipc",
-    "--socket=x11",
+    "--socket=fallback-x11",
+    "--socket=wayland",
     "--device=dri",
     /* Needs to access files locally */
     "--filesystem=home",
