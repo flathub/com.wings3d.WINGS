@@ -1,18 +1,17 @@
 {
   "app-id": "com.wings3d.WINGS",
   "runtime": "org.freedesktop.Platform",
-  "runtime-version": "24.08",
+  "runtime-version": "25.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "wings",
   "rename-icon": "wings",
+  "rename-appdata-file": "com.wings3d.WINGS.appdata.xml",
   "appdata-license": "Apache-2.0",
   "finish-args": [
-    /* X11 + XShm access */
     "--share=ipc",
     "--socket=fallback-x11",
     "--socket=wayland",
     "--device=dri",
-    /* Needs to access files locally */
     "--filesystem=home",
     "--metadata=X-DConf=migrate-path=/com/wings3d/WINGS/"
   ],
@@ -99,7 +98,8 @@
       "sources": [
         { "type": "git",
           "url": "https://github.com/KhronosGroup/OpenCL-Headers.git",
-          "commit": "4ea6df132107e3b4b9407f903204b5522fdffcd6" /* v2024.10.24 */
+          "tag": "v2025.07.22",
+          "commit": "8a97ebc88daa3495d6f57ec10bb515224400186f"
         }
       ]
     },
@@ -176,12 +176,12 @@
         "mv ${FLATPAK_DEST}/_deps .",
         "make unix",
         "./wings-*-linux.bzip2.run",
-        "install -d /app/share/applications /app/share/appdata",
+        "install -d /app/share/applications /app/share/metainfo",
         "sed -i 's/^Exec=.*/Exec=wings %f/' /app/lib/wings-*/wings.desktop",
-        "install /app/lib/wings-*/wings.desktop /app/share/applications/com.wings3d.WINGS.desktop",
-        "install /app/lib/wings-*/wings.appdata.xml /app/share/appdata/com.wings3d.WINGS.appdata.xml",
-        "install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_48x48.png /app/share/icons/hicolor/48x48/apps/wings.png",
-        "install -D /app/lib/wings-*/lib/wings*/ebin/wings_icon_256x256.png /app/share/icons/hicolor/256x256/apps/wings.png",
+        "install -Dm644 /app/lib/wings-*/wings.desktop /app/share/applications/com.wings3d.WINGS.desktop",
+        "install -Dm644 /app/lib/wings-*/wings.appdata.xml /app/share/metainfo/com.wings3d.WINGS.appdata.xml",
+        "install -Dm644 /app/lib/wings-*/lib/wings*/ebin/wings_icon_48x48.png /app/share/icons/hicolor/48x48/apps/wings.png",
+        "install -Dm644 /app/lib/wings-*/lib/wings*/ebin/wings_icon_256x256.png /app/share/icons/hicolor/256x256/apps/wings.png",
         "install /app/lib/wings-*/wings /app/bin"
       ],
       "sources": [
